@@ -5,7 +5,7 @@ from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 
 # Initialize the Streamlit app
-st.title("City Markers on Map")
+st.title("NDUI data availability")
 
 # Function to get latitude and longitude from city names with error handling
 def get_lat_lon(city):
