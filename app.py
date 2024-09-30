@@ -17,8 +17,63 @@ def get_lat_lon(city):
         st.error(f"Error: Geocoding for {city} timed out.")
         return None
 
-# List of cities to display on the map
-cities = ["New York", "London", "Tokyo", "Paris", "Delhi"]
+# Full list of cities to display on the map
+cities = [
+    # Austin region
+    "Austin", "Houston", "San Antonio", "Dallas", "Fort Worth",
+    # LA region
+    "LA", "San Diego", "Ensenada", "Mexicali", "San Jose", "San Francisco", "Las Vegas", "Fresno",
+    # Albuquerque region
+    "Las Cruces", "Alamogordo", "Gallup", "Santa Fe", "Taos", "Durango",
+    # Denver region
+    "Denver", "Boulder", "Colorado Springs", "Pueblo", "Cheyenne",
+    # Portland region
+    "Salem", "Corvallis", "Eugene", "Newport", "Lincoln City", "Bend", "Olympia",
+    # Louisville region
+    "Louisville", "Nashville", "Indianapolis", "Cincinnati", "Blomington", "Evansville", 
+    "Lexington", "Bowling Green", "Clarksville", "Paducah",
+    # Washington DC region
+    "Washington DC", "Richmond", "Ocean City", "Baltimore", "Pittsburgh", "Philadelphia", "New York",
+    # Kansas City region
+    "Kansas City", "Memphis", "St. Louis",
+    # Columbus region
+    "Columbus", "Akron", "Cleveland",
+    # Minneapolis region
+    "Minneapolis", "Rochester", "St Cloud",
+    # Seattle region
+    "Seattle", "Tacoma", "Victoria", "Vancouver",
+    # Delhi region
+    "Delhi", "Chandigarh", "Meerut", "Dehradun", "Patiala", "Gurgaon", "Alwar", "Mathura", 
+    "Aligarh", "Agra", "Rampur", "Bareily",
+    # Hong Kong region
+    "Hong Kong", "Macao", "Guangzhou", "Qingyuan", "Shaoguan", "Huizhou", "Heyuan", "Yangjiang", 
+    "Yunfu", "Shanwei",
+    # Melbourne region
+    "Melbourne", "Shepparton", "Canberra", "Geelong",
+    # Dubai region
+    "Dubai", "Abu Dhabi", "Al Ain", "Sohar", "Ras Al-Khaimah",
+    # London region
+    "London", "Bournemouth", "Exeter", "Plymouth", "Bristol", "Cardiff", "Oxford", "Birmingham", 
+    "Cambridge", "Norwich",
+    # Berlin region
+    "Berlin", "Dresden", "Leipzig", "Magdeburg", "Potsdam", "Hanover", "Poznan", "Zeilona Gora", 
+    "Szczecin",
+    # Tokyo region
+    "Tokyo", "Yokohama", "Niigata", "Honshu",
+    # Dhaka region
+    "Dhaka", "Kolkata", "Khulna", "Jashore", "Kuakata", "Barishal", "Cumilla", "Bogura", "Mymensingh",
+    # Shanghai region
+    "Shanghai", "Taizhou", "Hangzhou", "Suzhou", "Nanjing", "Yancheng",
+    # Sao Paulo region
+    "Campinas", "Sao Carlos", "Rio de Janeiro",
+    # Mexico City region
+    "Mexico City", "Santiago de Quertaro", "Toluca", "Cuernavaca", "Morelia", "Chilpancingo", 
+    "Tehuacan", "Puebla",
+    # Cairo region
+    "Tanta", "Faiyum", "Al Fashn", "Maghagha", "Suez", "10th of Ramadan City", "Ismailia", "Zagazig", 
+    "Banha", "Mansoura", "Tanta", "Damanhour", "El Sadat City"
+]
+
 coords_list = []
 
 # Fetch latitude and longitude for each city
@@ -62,6 +117,7 @@ r = pdk.Deck(
 )
 
 st.pydeck_chart(r)
+
 
 
 # import streamlit as st
