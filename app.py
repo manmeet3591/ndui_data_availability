@@ -2,17 +2,20 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
 
 # Initialize the Streamlit app
 st.title("City Markers on Map")
 
-# Function to get latitude and longitude from city names
+# Function to get latitude and longitude from city names with error handling
 def get_lat_lon(city):
-    geolocator = Nominatim(user_agent="myGeocoder")
-    location = geolocator.geocode(city)
-    if location:
-        return (location.latitude, location.longitude)
-    else:
+    geolocator = Nominatim(user_agent="your_app_name")  # Update with a unique app name
+    try:
+        location = geolocator.geocode(city, timeout=10)
+        if location:
+            return (location.latitude, location.longitude)
+    except GeocoderTimedOut:
+        st.error(f"Error: Geocoding for {city} timed out.")
         return None
 
 # List of cities to display on the map
@@ -34,4 +37,4 @@ for city in cities:
 # Display the map in the Streamlit app
 st_folium(m, width=725)
 
-st.write("Cities displayed: ", ", ".join(cities))
+st.write("NDUI data availability: ", ", ".join(cities))
