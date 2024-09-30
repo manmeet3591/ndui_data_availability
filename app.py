@@ -1,386 +1,58 @@
 import streamlit as st
-import pydeck as pdk
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
 
 # Initialize the Streamlit app
 st.title("NDUI Data Availability")
 
-# Function to get latitude and longitude from city names with error handling
-def get_lat_lon(city):
-    geolocator = Nominatim(user_agent="your_app_name")  # Update with a unique app name
-    try:
-        location = geolocator.geocode(city, timeout=10)
-        if location:
-            return (location.latitude, location.longitude)
-    except GeocoderTimedOut:
-        st.error(f"Error: Geocoding for {city} timed out.")
-        return None
+# Description
+st.write("Below is a list of cities organized by continent. If you want to request a city outside of this list, please fill out [this form](https://example.com/form).")
 
-# Full list of cities to display on the map
-cities = [
-    # Austin region
-    "Austin", "Houston", "San Antonio", "Dallas", "Fort Worth",
-    # LA region
-    "LA", "San Diego", "Ensenada", "Mexicali", "San Jose", "San Francisco", "Las Vegas", "Fresno",
-    # Albuquerque region
-    "Las Cruces", "Alamogordo", "Gallup", "Santa Fe", "Taos", "Durango",
-    # Denver region
-    "Denver", "Boulder", "Colorado Springs", "Pueblo", "Cheyenne",
-    # Portland region
-    "Salem", "Corvallis", "Eugene", "Newport", "Lincoln City", "Bend", "Olympia",
-    # Louisville region
-    "Louisville", "Nashville", "Indianapolis", "Cincinnati", "Blomington", "Evansville", 
-    "Lexington", "Bowling Green", "Clarksville", "Paducah",
-    # Washington DC region
-    "Washington DC", "Richmond", "Ocean City", "Baltimore", "Pittsburgh", "Philadelphia", "New York",
-    # Kansas City region
-    "Kansas City", "Memphis", "St. Louis",
-    # Columbus region
-    "Columbus", "Akron", "Cleveland",
-    # Minneapolis region
-    "Minneapolis", "Rochester", "St Cloud",
-    # Seattle region
-    "Seattle", "Tacoma", "Victoria", "Vancouver",
-    # Delhi region
-    "Delhi", "Chandigarh", "Meerut", "Dehradun", "Patiala", "Gurgaon", "Alwar", "Mathura", 
-    "Aligarh", "Agra", "Rampur", "Bareily",
-    # Hong Kong region
-    "Hong Kong", "Macao", "Guangzhou", "Qingyuan", "Shaoguan", "Huizhou", "Heyuan", "Yangjiang", 
-    "Yunfu", "Shanwei",
-    # Melbourne region
-    "Melbourne", "Shepparton", "Canberra", "Geelong",
-    # Dubai region
-    "Dubai", "Abu Dhabi", "Al Ain", "Sohar", "Ras Al-Khaimah",
-    # London region
-    "London", "Bournemouth", "Exeter", "Plymouth", "Bristol", "Cardiff", "Oxford", "Birmingham", 
-    "Cambridge", "Norwich",
-    # Berlin region
-    "Berlin", "Dresden", "Leipzig", "Magdeburg", "Potsdam", "Hanover", "Poznan", "Zeilona Gora", 
-    "Szczecin",
-    # Tokyo region
-    "Tokyo", "Yokohama", "Niigata", "Honshu",
-    # Dhaka region
-    "Dhaka", "Kolkata", "Khulna", "Jashore", "Kuakata", "Barishal", "Cumilla", "Bogura", "Mymensingh",
-    # Shanghai region
-    "Shanghai", "Taizhou", "Hangzhou", "Suzhou", "Nanjing", "Yancheng",
-    # Sao Paulo region
-    "Campinas", "Sao Carlos", "Rio de Janeiro",
-    # Mexico City region
-    "Mexico City", "Santiago de Quertaro", "Toluca", "Cuernavaca", "Morelia", "Chilpancingo", 
-    "Tehuacan", "Puebla",
-    # Cairo region
-    "Tanta", "Faiyum", "Al Fashn", "Maghagha", "Suez", "10th of Ramadan City", "Ismailia", "Zagazig", 
-    "Banha", "Mansoura", "Tanta", "Damanhour", "El Sadat City"
-]
+# Cities categorized by continents
+st.subheader("North America")
+st.write("""
+- **Austin Region**: Austin, Houston, San Antonio, Dallas, Fort Worth  
+- **LA Region**: LA, San Diego, Ensenada, Mexicali, San Jose, San Francisco, Las Vegas, Fresno  
+- **Albuquerque Region**: Las Cruces, Alamogordo, Gallup, Santa Fe, Taos, Durango  
+- **Denver Region**: Denver, Boulder, Colorado Springs, Pueblo, Cheyenne  
+- **Portland Region**: Salem, Corvallis, Eugene, Newport, Lincoln City, Bend, Olympia  
+- **Louisville Region**: Louisville, Nashville, Indianapolis, Cincinnati, Blomington, Evansville, Lexington, Bowling Green, Clarksville, Paducah  
+- **Washington DC Region**: Washington DC, Richmond, Ocean City, Baltimore, Pittsburgh, Philadelphia, New York  
+- **Kansas City Region**: Kansas City, Memphis, St. Louis  
+- **Columbus Region**: Columbus, Akron, Cleveland  
+- **Minneapolis Region**: Minneapolis, Rochester, St. Cloud  
+- **Seattle Region**: Seattle, Tacoma, Victoria, Vancouver
+""")
 
-coords_list = []
+st.subheader("Asia")
+st.write("""
+- **Delhi Region**: Delhi, Chandigarh, Meerut, Dehradun, Patiala, Gurgaon, Alwar, Mathura, Aligarh, Agra, Rampur, Bareily  
+- **Hong Kong Region**: Hong Kong, Macao, Guangzhou, Qingyuan, Shaoguan, Huizhou, Heyuan, Yangjiang, Yunfu, Shanwei  
+- **Dubai Region**: Dubai, Abu Dhabi, Al Ain, Sohar, Ras Al-Khaimah  
+- **Tokyo Region**: Tokyo, Yokohama, Niigata, Honshu  
+- **Dhaka Region**: Dhaka, Kolkata, Khulna, Jashore, Kuakata, Barishal, Cumilla, Bogura, Mymensingh  
+- **Shanghai Region**: Shanghai, Taizhou, Hangzhou, Suzhou, Nanjing, Yancheng
+""")
 
-# Fetch latitude and longitude for each city
-for city in cities:
-    coords = get_lat_lon(city)
-    if coords:
-        coords_list.append({"name": city, "lat": coords[0], "lon": coords[1]})
-    else:
-        continue
-        # st.error(f"Could not fetch coordinates for {city}")
+st.subheader("Australia")
+st.write("""
+- **Melbourne Region**: Melbourne, Shepparton, Canberra, Geelong
+""")
 
-# URL to the custom marker icon (Google Maps-like pin)
-icon_url = "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
+st.subheader("Europe")
+st.write("""
+- **London Region**: London, Bournemouth, Exeter, Plymouth, Bristol, Cardiff, Oxford, Birmingham, Cambridge, Norwich  
+- **Berlin Region**: Berlin, Dresden, Leipzig, Magdeburg, Potsdam, Hanover, Poznan, Zeilona Gora, Szczecin
+""")
 
-# Add icon details to each city coordinate
-for coord in coords_list:
-    coord["icon_data"] = {
-        "url": icon_url,
-        "width": 256,  # Increase width to make the icon bigger
-        "height": 256,  # Increase height to make the icon bigger
-        "anchorY": 256,  # Position the icon correctly
-    }
+st.subheader("South America")
+st.write("""
+- **Sao Paulo Region**: Campinas, Sao Carlos, Rio de Janeiro  
+- **Mexico City Region**: Mexico City, Santiago de Quertaro, Toluca, Cuernavaca, Morelia, Chilpancingo, Tehuacan, Puebla
+""")
 
-# Convert the list of coordinates into a Pydeck IconLayer
-icon_layer = pdk.Layer(
-    "IconLayer",
-    data=coords_list,
-    get_icon="icon_data",
-    get_position="[lon, lat]",
-    get_size=8,  # Increase size of the icon
-    pickable=True,  # Enable hover tooltips
-)
+st.subheader("Africa")
+st.write("""
+- **Cairo Region**: Tanta, Faiyum, Al Fashn, Maghagha, Suez, 10th of Ramadan City, Ismailia, Zagazig, Banha, Mansoura, Tanta, Damanhour, El Sadat City
+""")
 
-# Create the Pydeck view for the entire globe
-view_state = pdk.ViewState(latitude=0, longitude=0, zoom=1, bearing=0, pitch=0)
-
-# Render the 3D globe in Streamlit
-r = pdk.Deck(
-    layers=[icon_layer],
-    initial_view_state=view_state,
-    tooltip={"text": "{name}"},  # Add tooltip to show city name when hovering
-)
-
-st.pydeck_chart(r)
-
-
-
-# import streamlit as st
-# import pydeck as pdk
-# from geopy.geocoders import Nominatim
-# from geopy.exc import GeocoderTimedOut
-
-# # Initialize the Streamlit app
-# st.title("NDUI Data Availability")
-
-# # Function to get latitude and longitude from city names with error handling
-# def get_lat_lon(city):
-#     geolocator = Nominatim(user_agent="your_app_name")  # Update with a unique app name
-#     try:
-#         location = geolocator.geocode(city, timeout=10)
-#         if location:
-#             return (location.latitude, location.longitude)
-#     except GeocoderTimedOut:
-#         st.error(f"Error: Geocoding for {city} timed out.")
-#         return None
-
-# # List of cities to display on the map
-# cities = ["New York", "London", "Tokyo", "Paris", "Delhi"]
-# coords_list = []
-
-# # Fetch latitude and longitude for each city
-# for city in cities:
-#     coords = get_lat_lon(city)
-#     if coords:
-#         coords_list.append({"name": city, "lat": coords[0], "lon": coords[1]})
-#     else:
-#         st.error(f"Could not fetch coordinates for {city}")
-
-# # URL to the custom marker icon (Google Maps-like pin)
-# icon_url = "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
-
-# # Add icon details to each city coordinate
-# for coord in coords_list:
-#     coord["icon_data"] = {
-#         "url": icon_url,
-#         "width": 128,  # Adjust size of the icon
-#         "height": 128,
-#         "anchorY": 128,  # Position the icon correctly
-#     }
-
-# # Convert the list of coordinates into a Pydeck IconLayer
-# icon_layer = pdk.Layer(
-#     "IconLayer",
-#     data=coords_list,
-#     get_icon="icon_data",
-#     get_position="[lon, lat]",
-#     get_size=4,  # Size of the icon relative to other elements
-#     pickable=True,
-# )
-
-# # Create the Pydeck view for the entire globe
-# view_state = pdk.ViewState(latitude=0, longitude=0, zoom=1, bearing=0, pitch=0)
-
-# # Render the 3D globe in Streamlit
-# r = pdk.Deck(
-#     layers=[icon_layer],
-#     initial_view_state=view_state,
-#     tooltip={"text": "{name}"},
-# )
-
-# st.pydeck_chart(r)
-
-# import streamlit as st
-# import pydeck as pdk
-# from geopy.geocoders import Nominatim
-# from geopy.exc import GeocoderTimedOut
-
-# # Initialize the Streamlit app
-# st.title("NDUI data availability")
-
-# # Function to get latitude and longitude from city names with error handling
-# def get_lat_lon(city):
-#     geolocator = Nominatim(user_agent="your_app_name")  # Update with a unique app name
-#     try:
-#         location = geolocator.geocode(city, timeout=10)
-#         if location:
-#             return (location.latitude, location.longitude)
-#     except GeocoderTimedOut:
-#         st.error(f"Error: Geocoding for {city} timed out.")
-#         return None
-
-# # List of cities to display on the map
-# cities = ["New York", "London", "Tokyo", "Paris", "Delhi"]
-# coords_list = []
-
-# # Fetch latitude and longitude for each city
-# for city in cities:
-#     coords = get_lat_lon(city)
-#     if coords:
-#         coords_list.append({"name": city, "lat": coords[0], "lon": coords[1]})
-#     else:
-#         st.error(f"Could not fetch coordinates for {city}")
-
-# # Convert the list of coordinates into a Pydeck layer
-# layer = pdk.Layer(
-#     "ScatterplotLayer",
-#     coords_list,
-#     get_position='[lon, lat]',
-#     get_color='[200, 30, 0, 160]',
-#     get_radius=500000,
-#     pickable=True,
-# )
-
-# # Create the Pydeck view for the entire globe
-# view_state = pdk.ViewState(latitude=0, longitude=0, zoom=1, bearing=0, pitch=0)
-
-# # Render the 3D globe in Streamlit
-# r = pdk.Deck(
-#     layers=[layer],
-#     initial_view_state=view_state,
-#     tooltip={"text": "{name}"},
-# )
-
-# st.pydeck_chart(r)
-
-# import streamlit as st
-# import folium
-# from streamlit_folium import st_folium
-# from geopy.geocoders import Nominatim
-# from geopy.exc import GeocoderTimedOut
-# from folium.plugins import MarkerCluster
-
-# # Initialize the Streamlit app
-# st.title("NDUI data availability")
-
-# # Function to get latitude and longitude from city names with error handling
-# def get_lat_lon(city):
-#     geolocator = Nominatim(user_agent="your_app_name")  # Update with a unique app name
-#     try:
-#         location = geolocator.geocode(city, timeout=10)
-#         if location:
-#             return (location.latitude, location.longitude)
-#     except GeocoderTimedOut:
-#         st.error(f"Error: Geocoding for {city} timed out.")
-#         return None
-
-# # List of cities to display on the map
-# cities = ["New York", "London", "Tokyo", "Paris", "Delhi"]
-
-# # Create a map centered on the first city
-# city_coords = get_lat_lon(cities[0])
-# if city_coords:
-#     m = folium.Map(location=city_coords, zoom_start=4)
-# else:
-#     st.error("Could not locate the first city to center the map.")
-
-# # Add a marker cluster to group nearby cities (optional, for better performance)
-# marker_cluster = MarkerCluster().add_to(m)
-
-# # Add pin-like markers for each city
-# for city in cities:
-#     coords = get_lat_lon(city)
-#     if coords:
-#         # Using folium Icon to simulate Google Maps marker (pin-style)
-#         folium.Marker(
-#             location=coords,
-#             popup=folium.Popup(city, parse_html=True),
-#             icon=folium.Icon(color='red', icon='info-sign')  # Simulate Google Maps pin with red marker
-#         ).add_to(marker_cluster)
-
-# # Display the map in the Streamlit app
-# st_folium(m, width=725)
-
-# st.write("Cities displayed: ", ", ".join(cities))
-########################################
-
-# import streamlit as st
-# import pydeck as pdk
-# from geopy.geocoders import Nominatim
-# from geopy.exc import GeocoderTimedOut
-
-# # Initialize the Streamlit app
-# st.title("NDUI data availability")
-
-# # Function to get latitude and longitude from city names with error handling
-# def get_lat_lon(city):
-#     geolocator = Nominatim(user_agent="your_app_name")  # Update with a unique app name
-#     try:
-#         location = geolocator.geocode(city, timeout=10)
-#         if location:
-#             return (location.latitude, location.longitude)
-#     except GeocoderTimedOut:
-#         st.error(f"Error: Geocoding for {city} timed out.")
-#         return None
-
-# # List of cities to display on the map
-# cities = ["New York", "London", "Tokyo", "Paris", "Delhi"]
-# coords_list = []
-
-# # Fetch latitude and longitude for each city
-# for city in cities:
-#     coords = get_lat_lon(city)
-#     if coords:
-#         coords_list.append({"name": city, "lat": coords[0], "lon": coords[1]})
-#     else:
-#         st.error(f"Could not fetch coordinates for {city}")
-
-# # Convert the list of coordinates into a Pydeck layer
-# layer = pdk.Layer(
-#     "ScatterplotLayer",
-#     coords_list,
-#     get_position='[lon, lat]',
-#     get_color='[200, 30, 0, 160]',
-#     get_radius=500000,
-#     pickable=True,
-# )
-
-# # Create the Pydeck view
-# view_state = pdk.ViewState(latitude=20, longitude=0, zoom=1, bearing=0, pitch=45)
-
-# # Render the 3D globe in Streamlit
-# r = pdk.Deck(
-#     layers=[layer],
-#     initial_view_state=view_state,
-#     tooltip={"text": "{name}"},
-# )
-
-# st.pydeck_chart(r)
-###########################################
-
-# import streamlit as st
-# import folium
-# from streamlit_folium import st_folium
-# from geopy.geocoders import Nominatim
-# from geopy.exc import GeocoderTimedOut
-
-# # Initialize the Streamlit app
-# st.title("NDUI data availability")
-
-# # Function to get latitude and longitude from city names with error handling
-# def get_lat_lon(city):
-#     geolocator = Nominatim(user_agent="your_app_name")  # Update with a unique app name
-#     try:
-#         location = geolocator.geocode(city, timeout=10)
-#         if location:
-#             return (location.latitude, location.longitude)
-#     except GeocoderTimedOut:
-#         st.error(f"Error: Geocoding for {city} timed out.")
-#         return None
-
-# # List of cities to display on the map
-# cities = ["New York", "London", "Tokyo", "Paris", "Delhi"]
-
-# # Create a map centered on the first city
-# city_coords = get_lat_lon(cities[0])
-# if city_coords:
-#     m = folium.Map(location=city_coords, zoom_start=4)
-# else:
-#     st.error("Could not locate the first city to center the map.")
-
-# # Add markers for each city
-# for city in cities:
-#     coords = get_lat_lon(city)
-#     if coords:
-#         folium.Marker(location=coords, popup=city).add_to(m)
-
-# # Display the map in the Streamlit app
-# st_folium(m, width=725)
-
-# st.write("NDUI data availability: ", ", ".join(cities))
+# Form link
+st.write("If you want to request a city outside this list, please fill out [this form](https://forms.gle/fU1Mukg1UAwne8AT6).")
