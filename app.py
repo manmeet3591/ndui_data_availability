@@ -82,7 +82,8 @@ for city in cities:
     if coords:
         coords_list.append({"name": city, "lat": coords[0], "lon": coords[1]})
     else:
-        st.error(f"Could not fetch coordinates for {city}")
+        continue
+        # st.error(f"Could not fetch coordinates for {city}")
 
 # URL to the custom marker icon (Google Maps-like pin)
 icon_url = "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
